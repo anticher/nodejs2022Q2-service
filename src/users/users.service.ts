@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create.dto';
-import { User } from './schemas/user.schema';
+import { User, UserResponse } from './schemas/user.schema';
 import { v4 as uuidv4, validate as isValidUUID } from 'uuid';
 import { UpdatePasswordDto } from './dto/update.dto';
 
@@ -8,20 +8,24 @@ import { UpdatePasswordDto } from './dto/update.dto';
 export class UsersService {
   private list: User[] = [];
 
-  create(createUserDto: CreateUserDto): User {
-    const user: User = createUserDto;
-    if (!user.login || !user.password) {
+  create(createUserDto: CreateUserDto): UserResponse {
+    if (!createUserDto.login || !createUserDto.password) {
       throw new HttpException(
         'user does not contain required fields: login and password',
         HttpStatus.BAD_REQUEST,
       );
     }
+    const user: User = createUserDto;
     user.id = uuidv4();
+    user.createdAt = Date.now();
+    user.updatedAt = Date.now();
+    user.version = 1;
     this.list.push(user);
-    return user;
+    const { password, ...rest } = user;
+    return rest;
   }
 
-  update(id: string, updatePasswordDto: UpdatePasswordDto): User | undefined {
+  update(id: string, updatePasswordDto: UpdatePasswordDto): UserResponse {
     if (!isValidUUID(id)) {
       throw new HttpException('userId is invalid', HttpStatus.BAD_REQUEST);
     }
@@ -33,7 +37,10 @@ export class UsersService {
       throw new HttpException('oldPassowrd is wrong', HttpStatus.FORBIDDEN);
     }
     user.password = updatePasswordDto.newPassword;
-    return user;
+    user.updatedAt = Date.now();
+    user.version += 1;
+    const { password, ...rest } = user;
+    return rest;
   }
 
   delete(id: string): void {
@@ -48,7 +55,7 @@ export class UsersService {
     throw new HttpException('', HttpStatus.NO_CONTENT);
   }
 
-  getUser(id: string): User {
+  getUser(id: string): UserResponse {
     if (!isValidUUID(id)) {
       throw new HttpException('userId is invalid', HttpStatus.BAD_REQUEST);
     }
@@ -56,10 +63,15 @@ export class UsersService {
     if (!user) {
       throw new HttpException('user does not exist', HttpStatus.NOT_FOUND);
     }
-    return user;
+    const { password, ...rest } = user;
+    return rest;
   }
 
-  getAll(): User[] {
-    return this.list;
+  getAll(): UserResponse[] {
+    const response = this.list.map((user) => {
+      const { password, ...rest } = user;
+      return rest;
+    });
+    return response;
   }
 }

@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create.dto';
 import { UpdatePasswordDto } from './dto/update.dto';
-import { User } from './schemas/user.schema';
+import { User, UserResponse } from './schemas/user.schema';
 import { UsersService } from './users.service';
 
 @Controller('user')
@@ -17,12 +17,15 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  register(@Body() user: User): CreateUserDto {
+  register(@Body() user: User): UserResponse {
     return this.usersService.create(user);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() passwords: UpdatePasswordDto): User {
+  update(
+    @Param('id') id: string,
+    @Body() passwords: UpdatePasswordDto,
+  ): UserResponse {
     return this.usersService.update(id, passwords);
   }
 
@@ -32,12 +35,12 @@ export class UsersController {
   }
 
   @Get(':id')
-  getById(@Param('id') id: string): User {
+  getById(@Param('id') id: string): UserResponse {
     return this.usersService.getUser(id);
   }
 
   @Get()
-  getAll(): User[] {
+  getAll(): UserResponse[] {
     return this.usersService.getAll();
   }
 }
