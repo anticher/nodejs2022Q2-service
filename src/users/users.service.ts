@@ -29,6 +29,12 @@ export class UsersService {
     if (!isValidUUID(id)) {
       throw new HttpException('userId is invalid', HttpStatus.BAD_REQUEST);
     }
+    if (!updatePasswordDto.oldPassword || !updatePasswordDto.newPassword) {
+      throw new HttpException(
+        'request does not contain required fields: oldPassword and newPassword',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     const user = this.list.find((item) => item.id === id);
     if (!user) {
       throw new HttpException('user does not exist', HttpStatus.NOT_FOUND);
