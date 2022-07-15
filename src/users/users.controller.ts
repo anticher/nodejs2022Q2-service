@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create.dto';
 import { UpdatePasswordDto } from './dto/update.dto';
-import { User, UserResponse } from './interfaces/user.schema';
+import { UserResponse } from './interfaces/user.model';
 import { UsersService } from './users.service';
 
 @Controller('user')
@@ -17,7 +17,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  register(@Body() user: User): UserResponse {
+  register(@Body() user: CreateUserDto): UserResponse {
     return this.usersService.create(user);
   }
 
