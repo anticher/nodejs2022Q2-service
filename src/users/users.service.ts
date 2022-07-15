@@ -9,12 +9,6 @@ export class UsersService {
   private list: User[] = [];
 
   create(createUserDto: CreateUserDto): UserResponse {
-    if (!createUserDto.login || !createUserDto.password) {
-      throw new HttpException(
-        'user does not contain required fields: login and password',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
     const user: User = createUserDto;
     user.id = uuidv4();
     user.createdAt = Date.now();
@@ -26,15 +20,6 @@ export class UsersService {
   }
 
   update(id: string, updatePasswordDto: UpdatePasswordDto): UserResponse {
-    if (!isValidUUID(id)) {
-      throw new HttpException('userId is invalid', HttpStatus.BAD_REQUEST);
-    }
-    if (!updatePasswordDto.oldPassword || !updatePasswordDto.newPassword) {
-      throw new HttpException(
-        'request does not contain required fields: oldPassword and newPassword',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
     const user = this.list.find((item) => item.id === id);
     if (!user) {
       throw new HttpException('user does not exist', HttpStatus.NOT_FOUND);
@@ -50,9 +35,6 @@ export class UsersService {
   }
 
   delete(id: string): void {
-    if (!isValidUUID(id)) {
-      throw new HttpException('userId is invalid', HttpStatus.BAD_REQUEST);
-    }
     const itemIndex = this.list.findIndex((item) => item.id === id);
     if (itemIndex < 0) {
       throw new HttpException('user does not exist', HttpStatus.NOT_FOUND);
@@ -62,9 +44,6 @@ export class UsersService {
   }
 
   getUser(id: string): UserResponse {
-    if (!isValidUUID(id)) {
-      throw new HttpException('userId is invalid', HttpStatus.BAD_REQUEST);
-    }
     const user = this.list.find((item) => item.id === id);
     if (!user) {
       throw new HttpException('user does not exist', HttpStatus.NOT_FOUND);

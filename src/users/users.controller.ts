@@ -6,6 +6,8 @@ import {
   Param,
   Put,
   Delete,
+  ValidationPipe,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create.dto';
 import { UpdatePasswordDto } from './dto/update.dto';
@@ -17,25 +19,27 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  register(@Body() user: CreateUserDto): UserResponse {
+  register(@Body(new ValidationPipe()) user: CreateUserDto): UserResponse {
     return this.usersService.create(user);
   }
 
   @Put(':id')
   update(
-    @Param('id') id: string,
-    @Body() passwords: UpdatePasswordDto,
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Body(new ValidationPipe()) passwords: UpdatePasswordDto,
   ): UserResponse {
     return this.usersService.update(id, passwords);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string): void {
+  delete(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string): void {
     return this.usersService.delete(id);
   }
 
   @Get(':id')
-  getById(@Param('id') id: string): UserResponse {
+  getById(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): UserResponse {
     return this.usersService.getUser(id);
   }
 
