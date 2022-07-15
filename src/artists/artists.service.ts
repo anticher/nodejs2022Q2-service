@@ -23,11 +23,11 @@ export class ArtistsService {
 
   update(id: string, updateArtistDto: UpdateArtistDto): ArtistResponse {
     if (!isValidUUID(id)) {
-      throw new HttpException('userId is invalid', HttpStatus.BAD_REQUEST);
+      throw new HttpException('artistId is invalid', HttpStatus.BAD_REQUEST);
     }
     const artist = this.list.find((item) => item.id === id);
     if (!artist) {
-      throw new HttpException('user does not exist', HttpStatus.NOT_FOUND);
+      throw new HttpException('artist does not exist', HttpStatus.NOT_FOUND);
     }
     artist.name = updateArtistDto.name ? updateArtistDto.name : artist.name;
     artist.grammy = updateArtistDto.grammy
@@ -38,11 +38,11 @@ export class ArtistsService {
 
   delete(id: string): void {
     if (!isValidUUID(id)) {
-      throw new HttpException('userId is invalid', HttpStatus.BAD_REQUEST);
+      throw new HttpException('artistId is invalid', HttpStatus.BAD_REQUEST);
     }
     const itemIndex = this.list.findIndex((item) => item.id === id);
     if (itemIndex < 0) {
-      throw new HttpException('user does not exist', HttpStatus.NOT_FOUND);
+      throw new HttpException('artist does not exist', HttpStatus.NOT_FOUND);
     }
     this.list.splice(itemIndex, 1);
     throw new HttpException('', HttpStatus.NO_CONTENT);
@@ -50,11 +50,11 @@ export class ArtistsService {
 
   getArtist(id: string): ArtistResponse {
     if (!isValidUUID(id)) {
-      throw new HttpException('userId is invalid', HttpStatus.BAD_REQUEST);
+      throw new HttpException('artistId is invalid', HttpStatus.BAD_REQUEST);
     }
     const artist = this.list.find((item) => item.id === id);
     if (!artist) {
-      throw new HttpException('user does not exist', HttpStatus.NOT_FOUND);
+      throw new HttpException('artist does not exist', HttpStatus.NOT_FOUND);
     }
     return artist;
   }
