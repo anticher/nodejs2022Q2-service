@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create.dto';
-import { User, UserResponse } from './schemas/user.schema';
+import { User, UserResponse } from './interfaces/user.schema';
 import { v4 as uuidv4, validate as isValidUUID } from 'uuid';
 import { UpdatePasswordDto } from './dto/update.dto';
 
