@@ -25,11 +25,11 @@ export class AlbumsService {
     if (!album) {
       throw new HttpException('album does not exist', HttpStatus.NOT_FOUND);
     }
-    album.name = updateAlbumDto.name ? updateAlbumDto.name : album.name;
-    album.year = updateAlbumDto.year ? updateAlbumDto.year : album.year;
-    album.artistId = updateAlbumDto.artistId
-      ? updateAlbumDto.artistId
-      : album.artistId;
+    for (const [key, value] of Object.entries(updateAlbumDto)) {
+      if (value !== undefined) {
+        album[key] = value;
+      }
+    }
     return album;
   }
 

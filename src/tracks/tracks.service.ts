@@ -25,16 +25,11 @@ export class TracksService {
     if (!track) {
       throw new HttpException('track does not exist', HttpStatus.NOT_FOUND);
     }
-    track.name = updateTrackDto.name ? updateTrackDto.name : track.name;
-    track.duration = updateTrackDto.duration
-      ? updateTrackDto.duration
-      : track.duration;
-    track.artistId = updateTrackDto.artistId
-      ? updateTrackDto.artistId
-      : track.artistId;
-    track.albumId = updateTrackDto.albumId
-      ? updateTrackDto.albumId
-      : track.albumId;
+    for (const [key, value] of Object.entries(updateTrackDto)) {
+      if (value !== undefined) {
+        track[key] = value;
+      }
+    }
     return track;
   }
 

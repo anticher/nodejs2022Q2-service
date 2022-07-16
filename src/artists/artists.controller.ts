@@ -6,6 +6,8 @@ import {
   Param,
   Put,
   Delete,
+  ValidationPipe,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { ArtistsService } from './artists.service';
 import { CreateArtistDto } from './dto/create.dto';
@@ -16,25 +18,27 @@ import { ArtistResponse } from './interfaces/artist.model';
 export class ArtistsController {
   constructor(private readonly artistsService: ArtistsService) {}
   @Post()
-  create(@Body() artist: CreateArtistDto): ArtistResponse {
+  create(@Body(new ValidationPipe()) artist: CreateArtistDto): ArtistResponse {
     return this.artistsService.create(artist);
   }
 
   @Put(':id')
   update(
-    @Param('id') id: string,
-    @Body() artist: UpdateArtistDto,
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Body(new ValidationPipe()) artist: UpdateArtistDto,
   ): ArtistResponse {
     return this.artistsService.update(id, artist);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string): void {
+  delete(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string): void {
     return this.artistsService.delete(id);
   }
 
   @Get(':id')
-  getById(@Param('id') id: string): ArtistResponse {
+  getById(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): ArtistResponse {
     return this.artistsService.getArtist(id);
   }
 
