@@ -13,23 +13,14 @@ export class TracksService {
     this.list = db.tracks;
   }
 
-  create(createTrackDto: CreateTrackDto): TrackResponse {
-    if (!createTrackDto.name) {
-      throw new HttpException(
-        'track does not contain required fields: name and grammy',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+  create(createTrackDto: CreateTrackDto): any {
     const track: Track = createTrackDto;
     track.id = uuidv4();
     this.list.push(track);
     return track;
   }
 
-  update(id: string, updateTrackDto: UpdateTrackDto): TrackResponse {
-    if (!isValidUUID(id)) {
-      throw new HttpException('trackId is invalid', HttpStatus.BAD_REQUEST);
-    }
+  update(id: string, updateTrackDto: UpdateTrackDto): any {
     const track = this.list.find((item) => item.id === id);
     if (!track) {
       throw new HttpException('track does not exist', HttpStatus.NOT_FOUND);
@@ -48,9 +39,6 @@ export class TracksService {
   }
 
   delete(id: string): void {
-    if (!isValidUUID(id)) {
-      throw new HttpException('trackId is invalid', HttpStatus.BAD_REQUEST);
-    }
     const itemIndex = this.list.findIndex((item) => item.id === id);
     if (itemIndex < 0) {
       throw new HttpException('track does not exist', HttpStatus.NOT_FOUND);
@@ -66,17 +54,29 @@ export class TracksService {
   }
 
   getTrack(id: string): TrackResponse {
-    if (!isValidUUID(id)) {
-      throw new HttpException('trackId is invalid', HttpStatus.BAD_REQUEST);
-    }
     const track = this.list.find((item) => item.id === id);
     if (!track) {
       throw new HttpException('track does not exist', HttpStatus.NOT_FOUND);
     }
-    return track;
+    const result: TrackResponse = {
+      id: track.id,
+      name: track.name,
+      duration: track.duration,
+      artist: null,
+      album: null,
+    };
+    if (track.artistId) {
+      result.artist = this.db.artists.find(
+        (item) => item.id === track.artistId,
+      );
+    }
+    if (track.albumId) {
+      result.album = this.db.albums.find((item) => item.id === track.albumId);
+    }
+    return result;
   }
 
-  getAll(): TrackResponse[] {
+  getAll(): any[] {
     return this.list;
   }
 }
