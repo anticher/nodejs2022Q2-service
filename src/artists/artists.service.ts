@@ -9,7 +9,7 @@ import { IMDBService } from 'src/db/in-memory-db.service';
 export class ArtistsService {
   private list: Artist[] = [];
 
-  constructor(db: IMDBService) {
+  constructor(private db: IMDBService) {
     this.list = db.artists;
   }
 
@@ -48,6 +48,12 @@ export class ArtistsService {
     const itemIndex = this.list.findIndex((item) => item.id === id);
     if (itemIndex < 0) {
       throw new HttpException('artist does not exist', HttpStatus.NOT_FOUND);
+    }
+    const itemInFavorouritesId = this.db.favourites.artistIds.findIndex(
+      (item) => item === id,
+    );
+    if (itemInFavorouritesId >= 0) {
+      this.db.favourites.artistIds.splice(itemInFavorouritesId, 1);
     }
     this.list.splice(itemIndex, 1);
     throw new HttpException('', HttpStatus.NO_CONTENT);
