@@ -38,14 +38,13 @@ export class AlbumsService {
     if (itemIndex < 0) {
       throw new HttpException('album does not exist', HttpStatus.NOT_FOUND);
     }
-    const itemInFavorouritesId = this.db.favourites.albumIds.findIndex(
-      (item) => item === id,
-    );
-    if (itemInFavorouritesId >= 0) {
-      this.db.favourites.albumIds.splice(itemInFavorouritesId, 1);
-    }
+    this.db.favourites.albumIds.forEach((element, index) => {
+      if (element === id) {
+        this.db.favourites.albumIds.splice(index, 1);
+      }
+    });
     this.db.tracks.forEach((track) => {
-      if (track.albumId == id) {
+      if (track.albumId === id) {
         track.albumId = null;
       }
     });

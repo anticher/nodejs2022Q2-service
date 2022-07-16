@@ -13,14 +13,14 @@ export class TracksService {
     this.list = db.tracks;
   }
 
-  create(createTrackDto: CreateTrackDto): any {
+  create(createTrackDto: CreateTrackDto): TrackResponse {
     const track: Track = createTrackDto;
     track.id = uuidv4();
     this.list.push(track);
     return track;
   }
 
-  update(id: string, updateTrackDto: UpdateTrackDto): any {
+  update(id: string, updateTrackDto: UpdateTrackDto): TrackResponse {
     const track = this.list.find((item) => item.id === id);
     if (!track) {
       throw new HttpException('track does not exist', HttpStatus.NOT_FOUND);
@@ -38,12 +38,9 @@ export class TracksService {
     if (itemIndex < 0) {
       throw new HttpException('track does not exist', HttpStatus.NOT_FOUND);
     }
-    const itemInFavorouritesId = this.db.favourites.trackIds.findIndex(
-      (item) => item === id,
+    this.db.favourites.trackIds = this.db.favourites.trackIds.filter(
+      (element) => element !== id,
     );
-    if (itemInFavorouritesId >= 0) {
-      this.db.favourites.trackIds.splice(itemInFavorouritesId, 1);
-    }
     this.list.splice(itemIndex, 1);
     throw new HttpException('', HttpStatus.NO_CONTENT);
   }

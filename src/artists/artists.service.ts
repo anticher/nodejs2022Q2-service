@@ -38,15 +38,19 @@ export class ArtistsService {
     if (itemIndex < 0) {
       throw new HttpException('artist does not exist', HttpStatus.NOT_FOUND);
     }
-    const itemInFavorouritesId = this.db.favourites.artistIds.findIndex(
-      (item) => item === id,
-    );
-    if (itemInFavorouritesId >= 0) {
-      this.db.favourites.artistIds.splice(itemInFavorouritesId, 1);
-    }
+    this.db.favourites.artistIds.forEach((element, index) => {
+      if (element === id) {
+        this.db.favourites.artistIds.splice(index, 1);
+      }
+    });
     this.db.tracks.forEach((track) => {
-      if (track.artistId == id) {
+      if (track.artistId === id) {
         track.artistId = null;
+      }
+    });
+    this.db.albums.forEach((album) => {
+      if (album.artistId === id) {
+        album.artistId = null;
       }
     });
     this.list.splice(itemIndex, 1);
