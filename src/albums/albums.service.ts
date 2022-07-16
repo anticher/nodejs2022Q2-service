@@ -2,10 +2,16 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create.dto';
 import { v4 as uuidv4, validate as isValidUUID } from 'uuid';
 import { UpdateAlbumDto } from './dto/update.dto';
+import { Album, AlbumResponse } from './interfaces/album.model';
+import { IMDBService } from 'src/db/in-memory-db.service';
 
 @Injectable()
 export class AlbumsService {
   private list: Album[] = [];
+
+  constructor(db: IMDBService) {
+    this.list = db.albums;
+  }
 
   create(createAlbumDto: CreateAlbumDto): AlbumResponse {
     if (!createAlbumDto.name) {

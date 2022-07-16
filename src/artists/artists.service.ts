@@ -3,10 +3,15 @@ import { CreateArtistDto } from './dto/create.dto';
 import { Artist, ArtistResponse } from './interfaces/artist.model';
 import { v4 as uuidv4, validate as isValidUUID } from 'uuid';
 import { UpdateArtistDto } from './dto/update.dto';
+import { IMDBService } from 'src/db/in-memory-db.service';
 
 @Injectable()
 export class ArtistsService {
   private list: Artist[] = [];
+
+  constructor(db: IMDBService) {
+    this.list = db.artists;
+  }
 
   create(createArtistDto: CreateArtistDto): ArtistResponse {
     if (!createArtistDto.name) {

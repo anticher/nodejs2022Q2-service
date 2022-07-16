@@ -10,6 +10,7 @@ import {
 import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create.dto';
 import { UpdateAlbumDto } from './dto/update.dto';
+import { AlbumResponse } from './interfaces/album.model';
 
 @Controller('album')
 export class AlbumsController {

@@ -3,10 +3,15 @@ import { CreateUserDto } from './dto/create.dto';
 import { User, UserResponse } from './interfaces/user.model';
 import { v4 as uuidv4, validate as isValidUUID } from 'uuid';
 import { UpdatePasswordDto } from './dto/update.dto';
+import { IMDBService } from 'src/db/in-memory-db.service';
 
 @Injectable()
 export class UsersService {
   private list: User[] = [];
+
+  constructor(db: IMDBService) {
+    this.list = db.users;
+  }
 
   create(createUserDto: CreateUserDto): UserResponse {
     const user: User = createUserDto;

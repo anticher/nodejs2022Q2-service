@@ -3,10 +3,15 @@ import { CreateTrackDto } from './dto/create.dto';
 import { Track, TrackResponse } from './interfaces/track.model';
 import { v4 as uuidv4, validate as isValidUUID } from 'uuid';
 import { UpdateTrackDto } from './dto/update.dto';
+import { IMDBService } from 'src/db/in-memory-db.service';
 
 @Injectable()
 export class TracksService {
   private list: Track[] = [];
+
+  constructor(db: IMDBService) {
+    this.list = db.tracks;
+  }
 
   create(createTrackDto: CreateTrackDto): TrackResponse {
     if (!createTrackDto.name) {
