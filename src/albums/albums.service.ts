@@ -14,12 +14,6 @@ export class AlbumsService {
   }
 
   create(createAlbumDto: CreateAlbumDto): AlbumResponse {
-    if (!createAlbumDto.name) {
-      throw new HttpException(
-        'album does not contain required fields: name and grammy',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
     const album: Album = createAlbumDto;
     album.id = uuidv4();
     this.list.push(album);
@@ -27,9 +21,6 @@ export class AlbumsService {
   }
 
   update(id: string, updateAlbumDto: UpdateAlbumDto): AlbumResponse {
-    if (!isValidUUID(id)) {
-      throw new HttpException('albumId is invalid', HttpStatus.BAD_REQUEST);
-    }
     const album = this.list.find((item) => item.id === id);
     if (!album) {
       throw new HttpException('album does not exist', HttpStatus.NOT_FOUND);
@@ -43,9 +34,6 @@ export class AlbumsService {
   }
 
   delete(id: string): void {
-    if (!isValidUUID(id)) {
-      throw new HttpException('albumId is invalid', HttpStatus.BAD_REQUEST);
-    }
     const itemIndex = this.list.findIndex((item) => item.id === id);
     if (itemIndex < 0) {
       throw new HttpException('album does not exist', HttpStatus.NOT_FOUND);
@@ -56,14 +44,16 @@ export class AlbumsService {
     if (itemInFavorouritesId >= 0) {
       this.db.favourites.albumIds.splice(itemInFavorouritesId, 1);
     }
+    this.db.tracks.forEach((track) => {
+      if (track.albumId == id) {
+        track.albumId = null;
+      }
+    });
     this.list.splice(itemIndex, 1);
     throw new HttpException('', HttpStatus.NO_CONTENT);
   }
 
   getAlbum(id: string): AlbumResponse {
-    if (!isValidUUID(id)) {
-      throw new HttpException('albumId is invalid', HttpStatus.BAD_REQUEST);
-    }
     const album = this.list.find((item) => item.id === id);
     if (!album) {
       throw new HttpException('album does not exist', HttpStatus.NOT_FOUND);

@@ -58,25 +58,10 @@ export class TracksService {
     if (!track) {
       throw new HttpException('track does not exist', HttpStatus.NOT_FOUND);
     }
-    const result: TrackResponse = {
-      id: track.id,
-      name: track.name,
-      duration: track.duration,
-      artist: null,
-      album: null,
-    };
-    if (track.artistId) {
-      result.artist = this.db.artists.find(
-        (item) => item.id === track.artistId,
-      );
-    }
-    if (track.albumId) {
-      result.album = this.db.albums.find((item) => item.id === track.albumId);
-    }
-    return result;
+    return track;
   }
 
-  getAll(): any[] {
+  getAll(): TrackResponse[] {
     return this.list;
   }
 }
