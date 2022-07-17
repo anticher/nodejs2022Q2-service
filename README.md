@@ -16,6 +16,9 @@ git clone {repository URL}
 ```
 npm install
 ```
+## Setting env
+
+Rename .env.example in the root folder to .env
 
 ## Running application
 
@@ -54,6 +57,10 @@ To run only specific test suite with authorization
 ```
 npm run test:auth -- <path to suite>
 ```
+
+## Swagger docs
+
+Use http://localhost:{PORT}/api and https://editor.swagger.io/ to check OpenAPI
 
 ### Auto-fix and format
 
