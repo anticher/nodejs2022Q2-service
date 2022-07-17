@@ -38,11 +38,9 @@ export class ArtistsService {
     if (itemIndex < 0) {
       throw new HttpException('artist does not exist', HttpStatus.NOT_FOUND);
     }
-    this.db.favourites.artistIds.forEach((element, index) => {
-      if (element === id) {
-        this.db.favourites.artistIds.splice(index, 1);
-      }
-    });
+    this.db.favourites.artistIds = this.db.favourites.artistIds.filter(
+      (element) => element !== id,
+    );
     this.db.tracks.forEach((track) => {
       if (track.artistId === id) {
         track.artistId = null;

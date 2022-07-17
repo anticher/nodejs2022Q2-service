@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { IMDBService } from 'src/db/in-memory-db.service';
 import { Favourites, FavouritesRepsonse } from './interfaces/favourite';
 import { v4 as uuidv4, validate as isValidUUID } from 'uuid';
+import { isNotEmpty } from 'class-validator';
 
 @Injectable()
 export class FavouritesService {
@@ -33,14 +34,7 @@ export class FavouritesService {
     if (!isValidUUID(id)) {
       throw new HttpException('artistId is invalid', HttpStatus.BAD_REQUEST);
     }
-    const artistIndex = this.db.artists.findIndex((item) => item.id === id);
-    if (artistIndex < 0) {
-      throw new HttpException(
-        `artist ${id} is not favourite`,
-        HttpStatus.NOT_FOUND,
-      );
-    }
-    this.list.artistIds.splice(artistIndex, 1);
+    this.list.artistIds = this.list.artistIds.filter((item) => item !== id);
     throw new HttpException('', HttpStatus.NO_CONTENT);
   }
 
@@ -66,14 +60,7 @@ export class FavouritesService {
     if (!isValidUUID(id)) {
       throw new HttpException('albumId is invalid', HttpStatus.BAD_REQUEST);
     }
-    const albumIndex = this.db.albums.findIndex((item) => item.id === id);
-    if (albumIndex < 0) {
-      throw new HttpException(
-        `album ${id} is not favourite`,
-        HttpStatus.NOT_FOUND,
-      );
-    }
-    this.list.albumIds.splice(albumIndex, 1);
+    this.list.albumIds = this.list.albumIds.filter((item) => item !== id);
     throw new HttpException('', HttpStatus.NO_CONTENT);
   }
 
@@ -99,14 +86,7 @@ export class FavouritesService {
     if (!isValidUUID(id)) {
       throw new HttpException('trackId is invalid', HttpStatus.BAD_REQUEST);
     }
-    const trackIndex = this.db.tracks.findIndex((item) => item.id === id);
-    if (trackIndex < 0) {
-      throw new HttpException(
-        `track ${id} is not favourite`,
-        HttpStatus.NOT_FOUND,
-      );
-    }
-    this.list.trackIds.splice(trackIndex, 1);
+    this.list.trackIds = this.list.trackIds.filter((item) => item !== id);
     throw new HttpException('', HttpStatus.NO_CONTENT);
   }
 

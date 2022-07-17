@@ -38,11 +38,9 @@ export class AlbumsService {
     if (itemIndex < 0) {
       throw new HttpException('album does not exist', HttpStatus.NOT_FOUND);
     }
-    this.db.favourites.albumIds.forEach((element, index) => {
-      if (element === id) {
-        this.db.favourites.albumIds.splice(index, 1);
-      }
-    });
+    this.db.favourites.albumIds = this.db.favourites.albumIds.filter(
+      (element) => element !== id,
+    );
     this.db.tracks.forEach((track) => {
       if (track.albumId === id) {
         track.albumId = null;
