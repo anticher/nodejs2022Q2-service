@@ -1,3 +1,5 @@
+import { ApiProperty } from '@nestjs/swagger';
+
 export interface Album {
   id?: string;
   name: string;
@@ -5,9 +7,16 @@ export interface Album {
   artistId: string | null;
 }
 
-export interface AlbumResponse {
+export class AlbumResponse {
+  @ApiProperty()
   id?: string;
+
+  @ApiProperty()
   name: string;
+
+  @ApiProperty()
   year: number;
+
+  @ApiProperty()
   artistId: string | null;
 }

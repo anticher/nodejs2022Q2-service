@@ -1,75 +1,128 @@
-import { Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+} from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FavouritesService } from './favourites.service';
-import { FavouritesRepsonse } from './interfaces/favourite';
+import { FavouritesResponse } from './interfaces/favourite';
 
+@ApiTags('Favourite')
 @Controller('favs')
 export class FavouritesController {
   constructor(private readonly favouritesService: FavouritesService) {}
-
+  @ApiOperation({
+    summary: 'Add favourite artist',
+    description: 'Add new favourite artist',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'The artist has been successfully added.',
+  })
+  @ApiResponse({ status: 400, description: 'ArtistId is invalid' })
+  @ApiResponse({ status: 422, description: 'Artist is not exist' })
   @Post('artist/:id')
-  addArtist(@Param('id') id: string): void {
+  addArtist(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): void {
     return this.favouritesService.addArtist(id);
   }
 
+  @ApiOperation({
+    summary: 'Delete favourite artist',
+    description: 'Delete artist from favourite',
+  })
+  @ApiResponse({
+    status: 204,
+    description: 'The artist has been successfully deleted.',
+  })
+  @ApiResponse({ status: 400, description: 'ArtistId is invalid' })
+  @ApiResponse({ status: 404, description: 'Artist is not exist' })
   @Delete('artist/:id')
-  deleteArtist(@Param('id') id: string): void {
+  deleteArtist(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): void {
     return this.favouritesService.deleteArtist(id);
   }
 
+  @ApiOperation({
+    summary: 'Add favourite album',
+    description: 'Add new favourite album',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'The album has been successfully added.',
+  })
+  @ApiResponse({ status: 400, description: 'AlbumId is invalid' })
+  @ApiResponse({ status: 422, description: 'Album is not exist' })
   @Post('album/:id')
-  addAlbum(@Param('id') id: string): void {
+  addAlbum(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string): void {
     return this.favouritesService.addAlbum(id);
   }
 
+  @ApiOperation({
+    summary: 'Delete favourite album',
+    description: 'Delete album from favourite',
+  })
+  @ApiResponse({
+    status: 204,
+    description: 'The album has been successfully deleted.',
+  })
+  @ApiResponse({ status: 400, description: 'AlbumId is invalid' })
+  @ApiResponse({ status: 404, description: 'Album is not exist' })
   @Delete('album/:id')
-  deleteAlbum(@Param('id') id: string): void {
+  deleteAlbum(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): void {
     return this.favouritesService.deleteAlbum(id);
   }
 
+  @ApiOperation({
+    summary: 'Add favourite track',
+    description: 'Add new favourite track',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'The track has been successfully added.',
+  })
+  @ApiResponse({ status: 400, description: 'TrackId is invalid' })
+  @ApiResponse({ status: 422, description: 'Track is not exist' })
   @Post('track/:id')
-  addTrack(@Param('id') id: string): void {
+  addTrack(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string): void {
     return this.favouritesService.addTrack(id);
   }
 
+  @ApiOperation({
+    summary: 'Delete favourite track',
+    description: 'Delete track from favourite',
+  })
+  @ApiResponse({
+    status: 204,
+    description: 'The track has been successfully deleted.',
+  })
+  @ApiResponse({ status: 400, description: 'TrackId is invalid' })
+  @ApiResponse({ status: 404, description: 'Track is not exist' })
   @Delete('track/:id')
-  deleteTrack(@Param('id') id: string): void {
+  deleteTrack(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): void {
     return this.favouritesService.deleteTrack(id);
   }
 
+  @ApiOperation({
+    summary: 'Get all favourites',
+    description: 'Get favourites records',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Gets favourites information',
+    type: FavouritesResponse,
+  })
   @Get()
-  getAll(): FavouritesRepsonse {
+  getAll(): FavouritesResponse {
     return this.favouritesService.getAll();
   }
-
-  // DELETE /favs/artist/:id - delete artist from favorites
-  // Server should answer with status code 204 if the artist was in favorites and now it's deleted id is found and deleted
-  // Server should answer with status code 400 and corresponding message if artistId is invalid (not uuid)
-  // Server should answer with status code 404 and corresponding message if corresponding artist is not favorite
-  // @Post()
-  // create(@Body() artist: CreateArtistDto): ArtistResponse {
-  //   return this.artistsService.create(artist);
-  // }
-
-  //   @Put(':id')
-  //   update(
-  //     @Param('id') id: string,
-  //     @Body() artist: UpdateArtistDto,
-  //   ): ArtistResponse {
-  //     return this.artistsService.update(id, artist);
-  //   }
-
-  // @Delete(':id')
-  // delete(@Param('id') id: string): void {
-  //   return this.artistsService.delete(id);
-  // }
-
-  //   @Get(':id')
-  //   getById(@Param('id') id: string): ArtistResponse {
-  //     return this.artistsService.getArtist(id);
-  //   }
-
-  // @Get()
-  // getAll(): ArtistResponse[] {
-  //   return this.artistsService.getAll();
-  // }
 }

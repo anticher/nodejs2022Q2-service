@@ -1,3 +1,5 @@
+import { ApiProperty } from '@nestjs/swagger';
+
 export interface Track {
   id?: string;
   name: string;
@@ -6,10 +8,19 @@ export interface Track {
   duration: number;
 }
 
-export interface TrackResponse {
+export class TrackResponse {
+  @ApiProperty()
   id?: string;
+
+  @ApiProperty()
   name: string;
-  artistId: string | null;
-  albumId: string | null;
+
+  @ApiProperty()
   duration: number;
+
+  @ApiProperty()
+  albumId: string | null;
+
+  @ApiProperty()
+  artistId: string | null;
 }

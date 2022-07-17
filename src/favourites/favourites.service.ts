@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { IMDBService } from 'src/db/in-memory-db.service';
-import { Favourites, FavouritesRepsonse } from './interfaces/favourite';
+import { Favourites, FavouritesResponse } from './interfaces/favourite';
 import { v4 as uuidv4, validate as isValidUUID } from 'uuid';
 import { isNotEmpty } from 'class-validator';
 
@@ -13,9 +13,6 @@ export class FavouritesService {
   }
 
   addArtist(id: string): void {
-    if (!isValidUUID(id)) {
-      throw new HttpException('artistId is invalid', HttpStatus.BAD_REQUEST);
-    }
     const artist = this.db.artists.find((item) => item.id === id);
     if (!artist) {
       throw new HttpException(
@@ -31,17 +28,11 @@ export class FavouritesService {
   }
 
   deleteArtist(id: string): void {
-    if (!isValidUUID(id)) {
-      throw new HttpException('artistId is invalid', HttpStatus.BAD_REQUEST);
-    }
     this.list.artistIds = this.list.artistIds.filter((item) => item !== id);
     throw new HttpException('', HttpStatus.NO_CONTENT);
   }
 
   addAlbum(id: string): void {
-    if (!isValidUUID(id)) {
-      throw new HttpException('albumId is invalid', HttpStatus.BAD_REQUEST);
-    }
     const album = this.db.albums.find((item) => item.id === id);
     if (!album) {
       throw new HttpException(
@@ -57,17 +48,11 @@ export class FavouritesService {
   }
 
   deleteAlbum(id: string): void {
-    if (!isValidUUID(id)) {
-      throw new HttpException('albumId is invalid', HttpStatus.BAD_REQUEST);
-    }
     this.list.albumIds = this.list.albumIds.filter((item) => item !== id);
     throw new HttpException('', HttpStatus.NO_CONTENT);
   }
 
   addTrack(id: string): void {
-    if (!isValidUUID(id)) {
-      throw new HttpException('trackId is invalid', HttpStatus.BAD_REQUEST);
-    }
     const track = this.db.tracks.find((item) => item.id === id);
     if (!track) {
       throw new HttpException(
@@ -83,15 +68,12 @@ export class FavouritesService {
   }
 
   deleteTrack(id: string): void {
-    if (!isValidUUID(id)) {
-      throw new HttpException('trackId is invalid', HttpStatus.BAD_REQUEST);
-    }
     this.list.trackIds = this.list.trackIds.filter((item) => item !== id);
     throw new HttpException('', HttpStatus.NO_CONTENT);
   }
 
-  getAll(): FavouritesRepsonse {
-    const result: FavouritesRepsonse = {
+  getAll(): FavouritesResponse {
+    const result: FavouritesResponse = {
       artists: [],
       albums: [],
       tracks: [],
