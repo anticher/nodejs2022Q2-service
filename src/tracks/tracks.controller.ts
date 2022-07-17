@@ -30,7 +30,9 @@ export class TracksController {
   })
   @ApiResponse({ status: 400, description: 'TrackId is invalid' })
   @Post()
-  create(@Body(new ValidationPipe()) track: CreateTrackDto): TrackResponse {
+  create(
+    @Body(new ValidationPipe({ whitelist: true })) track: CreateTrackDto,
+  ): TrackResponse {
     return this.tracksService.create(track);
   }
 
@@ -48,7 +50,7 @@ export class TracksController {
   @Put(':id')
   update(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-    @Body(new ValidationPipe()) track: UpdateTrackDto,
+    @Body(new ValidationPipe({ whitelist: true })) track: UpdateTrackDto,
   ): TrackResponse {
     return this.tracksService.update(id, track);
   }

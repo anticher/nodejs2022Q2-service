@@ -30,7 +30,9 @@ export class AlbumsController {
   })
   @ApiResponse({ status: 400, description: 'AlbumId is invalid' })
   @Post()
-  create(@Body(new ValidationPipe()) album: CreateAlbumDto): AlbumResponse {
+  create(
+    @Body(new ValidationPipe({ whitelist: true })) album: CreateAlbumDto,
+  ): AlbumResponse {
     return this.albumsService.create(album);
   }
 
@@ -48,7 +50,7 @@ export class AlbumsController {
   @Put(':id')
   update(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-    @Body(new ValidationPipe()) album: UpdateAlbumDto,
+    @Body(new ValidationPipe({ whitelist: true })) album: UpdateAlbumDto,
   ): AlbumResponse {
     return this.albumsService.update(id, album);
   }

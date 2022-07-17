@@ -30,7 +30,9 @@ export class ArtistsController {
   })
   @ApiResponse({ status: 400, description: 'ArtistId is invalid' })
   @Post()
-  create(@Body(new ValidationPipe()) artist: CreateArtistDto): ArtistResponse {
+  create(
+    @Body(new ValidationPipe({ whitelist: true })) artist: CreateArtistDto,
+  ): ArtistResponse {
     return this.artistsService.create(artist);
   }
 
@@ -48,7 +50,7 @@ export class ArtistsController {
   @Put(':id')
   update(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-    @Body(new ValidationPipe()) artist: UpdateArtistDto,
+    @Body(new ValidationPipe({ whitelist: true })) artist: UpdateArtistDto,
   ): ArtistResponse {
     return this.artistsService.update(id, artist);
   }

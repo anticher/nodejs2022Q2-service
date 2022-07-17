@@ -30,7 +30,9 @@ export class UsersController {
   })
   @ApiResponse({ status: 400, description: 'User data is invalid' })
   @Post()
-  register(@Body(new ValidationPipe()) user: CreateUserDto): UserResponse {
+  register(
+    @Body(new ValidationPipe({ whitelist: true })) user: CreateUserDto,
+  ): UserResponse {
     return this.usersService.create(user);
   }
 
@@ -49,7 +51,7 @@ export class UsersController {
   @Put(':id')
   update(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-    @Body(new ValidationPipe()) passwords: UpdatePasswordDto,
+    @Body(new ValidationPipe({ whitelist: true })) passwords: UpdatePasswordDto,
   ): UserResponse {
     return this.usersService.update(id, passwords);
   }
