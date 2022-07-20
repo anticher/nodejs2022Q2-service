@@ -1,0 +1,45 @@
+version: '3.7'
+
+services:
+  main:
+    container_name: main
+    image: rest-service
+    build:
+      context: .
+      target: development
+    restart: always
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - ${PORT}:${PORT}
+      - ${APP_PORT}:${APP_PORT}
+    command: npm run start:dev
+    env_file:
+      - .env
+    networks:
+      - ${NETWORK_NAME}
+    depends_on:
+      - postgres
+  postgres:
+    container_name: postgres
+    image: rest-database
+    build: db-docker-files
+    restart: always
+    networks:
+      - ${NETWORK_NAME}
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRESS_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      PG_DATA: /var/lib/postgresql/data
+    ports:
+      - ${POSTGRESS_PORT}:${POSTGRESS_PORT}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+networks:
+  webnet:
+    name: ${NETWORK_NAME}
+    driver: bridge
+volumes:
+  pgdata:
