@@ -12,6 +12,7 @@ import {
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create.dto';
 import { UpdatePasswordDto } from './dto/update.dto';
+import UserEntity from './entities/user.entity';
 import { UserResponse } from './interfaces/user.model';
 import { UsersService } from './users.service';
 
@@ -32,7 +33,7 @@ export class UsersController {
   @Post()
   register(
     @Body(new ValidationPipe({ whitelist: true })) user: CreateUserDto,
-  ): UserResponse {
+  ): Promise<UserEntity> {
     return this.usersService.create(user);
   }
 
@@ -52,7 +53,7 @@ export class UsersController {
   update(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body(new ValidationPipe({ whitelist: true })) passwords: UpdatePasswordDto,
-  ): UserResponse {
+  ): Promise<UserEntity> {
     return this.usersService.update(id, passwords);
   }
 
@@ -67,7 +68,9 @@ export class UsersController {
   @ApiResponse({ status: 400, description: 'UserId is invalid' })
   @ApiResponse({ status: 404, description: 'User is not exist' })
   @Delete(':id')
-  delete(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string): void {
+  delete(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): Promise<void> {
     return this.usersService.delete(id);
   }
 
@@ -85,7 +88,7 @@ export class UsersController {
   @Get(':id')
   getById(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-  ): UserResponse {
+  ): Promise<UserEntity> {
     return this.usersService.getUser(id);
   }
 
@@ -99,7 +102,7 @@ export class UsersController {
     type: [UserResponse],
   })
   @Get()
-  getAll(): UserResponse[] {
+  getAll(): Promise<UserEntity[]> {
     return this.usersService.getAll();
   }
 }

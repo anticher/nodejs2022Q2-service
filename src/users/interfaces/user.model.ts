@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export interface User {
   id?: string;
+  userId?: string;
   login: string;
   password: string;
   version?: number;
