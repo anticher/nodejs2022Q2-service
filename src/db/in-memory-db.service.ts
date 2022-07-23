@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Artist } from 'src/artists/interfaces/artist.model';
 import { Album } from 'src/albums/interfaces/album.model';
 import { Track, TrackResponse } from 'src/tracks/interfaces/track.model';
-import { User } from 'src/users/interfaces/user.model';
+import { User } from 'src/users/models/user.model';
 import { Favourites } from 'src/favourites/interfaces/favourite';
 
 @Injectable()

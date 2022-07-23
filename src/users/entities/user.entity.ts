@@ -6,13 +6,19 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
-class UserEntity {
-  @PrimaryGeneratedColumn()
-  public id?: number;
+const createUpdateDateTransform = () => {
+  return {
+    transformer: {
+      to: (value: Date) => value,
+      from: (value: Date) => value.getTime(),
+    },
+  };
+};
 
-  @Column()
-  public userId: string;
+@Entity('user')
+class UserEntity {
+  @PrimaryGeneratedColumn('uuid')
+  public id: string;
 
   @Column()
   public login: string;
@@ -23,11 +29,11 @@ class UserEntity {
   @Column()
   public version: number;
 
-  @CreateDateColumn()
-  public createdAt?: number;
+  @CreateDateColumn(createUpdateDateTransform())
+  public createdAt: number;
 
-  @UpdateDateColumn()
-  public updatedAt?: number;
+  @UpdateDateColumn(createUpdateDateTransform())
+  public updatedAt: number;
 }
 
 export default UserEntity;
