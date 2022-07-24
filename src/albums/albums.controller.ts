@@ -13,7 +13,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create.dto';
 import { UpdateAlbumDto } from './dto/update.dto';
-import { AlbumResponse } from './interfaces/album.model';
+import { Album } from './models/album.model';
 
 @ApiTags('Album')
 @Controller('album')
@@ -26,13 +26,13 @@ export class AlbumsController {
   @ApiResponse({
     status: 201,
     description: 'The album has been successfully created.',
-    type: AlbumResponse,
+    type: Album,
   })
   @ApiResponse({ status: 400, description: 'AlbumId is invalid' })
   @Post()
   create(
     @Body(new ValidationPipe({ whitelist: true })) album: CreateAlbumDto,
-  ): AlbumResponse {
+  ): Promise<Album> {
     return this.albumsService.create(album);
   }
 
@@ -43,7 +43,7 @@ export class AlbumsController {
   @ApiResponse({
     status: 200,
     description: 'The album has been successfully updated.',
-    type: AlbumResponse,
+    type: Album,
   })
   @ApiResponse({ status: 400, description: 'AlbumId is invalid' })
   @ApiResponse({ status: 404, description: 'Album is not exist' })
@@ -51,7 +51,7 @@ export class AlbumsController {
   update(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body(new ValidationPipe({ whitelist: true })) album: UpdateAlbumDto,
-  ): AlbumResponse {
+  ): Promise<Album> {
     return this.albumsService.update(id, album);
   }
 
@@ -66,7 +66,9 @@ export class AlbumsController {
   @ApiResponse({ status: 400, description: 'AlbumId is invalid' })
   @ApiResponse({ status: 404, description: 'Album is not exist' })
   @Delete(':id')
-  delete(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string): void {
+  delete(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): Promise<void> {
     return this.albumsService.delete(id);
   }
 
@@ -77,14 +79,14 @@ export class AlbumsController {
   @ApiResponse({
     status: 200,
     description: 'Gets album information',
-    type: AlbumResponse,
+    type: Album,
   })
   @ApiResponse({ status: 400, description: 'AlbumId is invalid' })
   @ApiResponse({ status: 404, description: 'Album is not exist' })
   @Get(':id')
   getById(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-  ): AlbumResponse {
+  ): Promise<Album> {
     return this.albumsService.getAlbum(id);
   }
 
@@ -95,10 +97,10 @@ export class AlbumsController {
   @ApiResponse({
     status: 200,
     description: 'Gets albums information',
-    type: [AlbumResponse],
+    type: [Album],
   })
   @Get()
-  getAll(): AlbumResponse[] {
+  getAll(): Promise<Album[]> {
     return this.albumsService.getAll();
   }
 }

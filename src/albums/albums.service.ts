@@ -1,27 +1,26 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create.dto';
-import { v4 as uuidv4, validate as isValidUUID } from 'uuid';
 import { UpdateAlbumDto } from './dto/update.dto';
-import { Album, AlbumResponse } from './interfaces/album.model';
-import { IMDBService } from 'src/db/in-memory-db.service';
+import { Album } from './models/album.model';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import AlbumEntity from './entities/album.entity';
 
 @Injectable()
 export class AlbumsService {
-  private list: Album[] = [];
+  constructor(
+    @InjectRepository(AlbumEntity)
+    private albumsRepository: Repository<AlbumEntity>,
+  ) {}
 
-  constructor(private db: IMDBService) {
-    this.list = db.albums;
+  async create(createArtistDto: CreateAlbumDto): Promise<Album> {
+    const newAlbum = this.albumsRepository.create(createArtistDto);
+    await this.albumsRepository.save(newAlbum);
+    return await this.getAlbum(newAlbum.id);
   }
 
-  create(createAlbumDto: CreateAlbumDto): AlbumResponse {
-    const album: Album = createAlbumDto;
-    album.id = uuidv4();
-    this.list.push(album);
-    return album;
-  }
-
-  update(id: string, updateAlbumDto: UpdateAlbumDto): AlbumResponse {
-    const album = this.list.find((item) => item.id === id);
+  async update(id: string, updateAlbumDto: UpdateAlbumDto): Promise<Album> {
+    const album = await this.getAlbumFromDB(id);
     if (!album) {
       throw new HttpException('album does not exist', HttpStatus.NOT_FOUND);
     }
@@ -30,35 +29,43 @@ export class AlbumsService {
         album[key] = value;
       }
     }
-    return album;
+    await this.albumsRepository.update(album.id, album);
+    return await this.getAlbumFromDB(id);
   }
 
-  delete(id: string): void {
-    const itemIndex = this.list.findIndex((item) => item.id === id);
-    if (itemIndex < 0) {
+  async delete(id: string): Promise<void> {
+    const album = await this.getAlbumFromDB(id);
+    if (!album) {
       throw new HttpException('album does not exist', HttpStatus.NOT_FOUND);
     }
-    this.db.favourites.albumIds = this.db.favourites.albumIds.filter(
-      (element) => element !== id,
-    );
-    this.db.tracks.forEach((track) => {
-      if (track.albumId === id) {
-        track.albumId = null;
-      }
-    });
-    this.list.splice(itemIndex, 1);
+    //   this.db.favourites.albumIds = this.db.favourites.albumIds.filter(
+    //     (element) => element !== id,
+    //   );
+    //   this.db.tracks.forEach((track) => {
+    //     if (track.albumId === id) {
+    //       track.albumId = null;
+    //     }
+    //   });
+    await this.albumsRepository.delete(album.id);
     throw new HttpException('', HttpStatus.NO_CONTENT);
   }
 
-  getAlbum(id: string): AlbumResponse {
-    const album = this.list.find((item) => item.id === id);
+  async getAlbumFromDB(id: string): Promise<AlbumEntity> {
+    const album = await this.albumsRepository.findOneBy({
+      id: id,
+    });
+    return album;
+  }
+
+  async getAlbum(id: string): Promise<Album> {
+    const album = await this.getAlbumFromDB(id);
     if (!album) {
       throw new HttpException('album does not exist', HttpStatus.NOT_FOUND);
     }
     return album;
   }
 
-  getAll(): AlbumResponse[] {
-    return this.list;
+  async getAll(): Promise<Album[]> {
+    return await this.albumsRepository.find();
   }
 }

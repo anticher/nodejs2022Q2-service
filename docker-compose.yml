@@ -39,20 +39,20 @@ services:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
     volumes:
       - pgdata:/var/lib/postgresql/data
-  # pgadmin:
-  #   links:
-  #   - postgres:postgres
-  #   container_name: pgadmin
-  #   image: rest-pgadmin
-  #   build: docker-files/pgadmin-docker-file
-  #   ports:
-  #   - ${PGADMIN_PORT_1}:${PGADMIN_PORT_2}
-  #   volumes:
-  #   - pgadmin:/root/.pgadmin
-  #   env_file:
-  #   - .env
-  #   networks:
-  #   - ${NETWORK_NAME}
+  pgadmin:
+    links:
+    - postgres:postgres
+    container_name: pgadmin
+    image: rest-pgadmin
+    build: docker-files/pgadmin-docker-file
+    ports:
+    - ${PGADMIN_PORT_1}:${PGADMIN_PORT_2}
+    volumes:
+    - pgadmin:/root/.pgadmin
+    env_file:
+    - .env
+    networks:
+    - ${NETWORK_NAME}
 networks:
   webnet:
     name: ${NETWORK_NAME}
