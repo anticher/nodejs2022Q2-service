@@ -12,7 +12,7 @@ import {
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateTrackDto } from './dto/create.dto';
 import { UpdateTrackDto } from './dto/update.dto';
-import { TrackResponse } from './interfaces/track.model';
+import { Track } from './models/track.model';
 import { TracksService } from './tracks.service';
 
 @ApiTags('Track')
@@ -26,13 +26,13 @@ export class TracksController {
   @ApiResponse({
     status: 201,
     description: 'The track has been successfully created.',
-    type: TrackResponse,
+    type: Track,
   })
   @ApiResponse({ status: 400, description: 'TrackId is invalid' })
   @Post()
   create(
     @Body(new ValidationPipe({ whitelist: true })) track: CreateTrackDto,
-  ): TrackResponse {
+  ): Promise<Track> {
     return this.tracksService.create(track);
   }
 
@@ -43,7 +43,7 @@ export class TracksController {
   @ApiResponse({
     status: 200,
     description: 'The track has been successfully updated.',
-    type: TrackResponse,
+    type: Track,
   })
   @ApiResponse({ status: 400, description: 'TrackId is invalid' })
   @ApiResponse({ status: 404, description: 'Track is not exist' })
@@ -51,7 +51,7 @@ export class TracksController {
   update(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body(new ValidationPipe({ whitelist: true })) track: UpdateTrackDto,
-  ): TrackResponse {
+  ): Promise<Track> {
     return this.tracksService.update(id, track);
   }
 
@@ -66,7 +66,9 @@ export class TracksController {
   @ApiResponse({ status: 400, description: 'TrackId is invalid' })
   @ApiResponse({ status: 404, description: 'Track is not exist' })
   @Delete(':id')
-  delete(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string): void {
+  delete(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): Promise<void> {
     return this.tracksService.delete(id);
   }
 
@@ -77,14 +79,14 @@ export class TracksController {
   @ApiResponse({
     status: 200,
     description: 'Gets track information',
-    type: TrackResponse,
+    type: Track,
   })
   @ApiResponse({ status: 400, description: 'TrackId is invalid' })
   @ApiResponse({ status: 404, description: 'Track is not exist' })
   @Get(':id')
   getById(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-  ): TrackResponse {
+  ): Promise<Track> {
     return this.tracksService.getTrack(id);
   }
 
@@ -95,10 +97,10 @@ export class TracksController {
   @ApiResponse({
     status: 200,
     description: 'Gets tracks information',
-    type: [TrackResponse],
+    type: [Track],
   })
   @Get()
-  getAll(): TrackResponse[] {
+  getAll(): Promise<Track[]> {
     return this.tracksService.getAll();
   }
 }

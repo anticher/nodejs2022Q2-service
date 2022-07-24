@@ -13,8 +13,8 @@ export class AlbumsService {
     private albumsRepository: Repository<AlbumEntity>,
   ) {}
 
-  async create(createArtistDto: CreateAlbumDto): Promise<Album> {
-    const newAlbum = this.albumsRepository.create(createArtistDto);
+  async create(createAlbumDto: CreateAlbumDto): Promise<Album> {
+    const newAlbum = this.albumsRepository.create(createAlbumDto);
     await this.albumsRepository.save(newAlbum);
     return await this.getAlbum(newAlbum.id);
   }
