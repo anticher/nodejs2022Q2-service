@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create.dto';
-import { Artist } from './interfaces/artist.model';
+import { Artist } from './models/artist.model';
 import { UpdateArtistDto } from './dto/update.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import ArtistEntity from './entities/artist.entity';
@@ -30,7 +30,7 @@ export class ArtistsService {
       }
     }
     await this.artistsRepository.update(artist.id, artist);
-    return artist;
+    return await this.getArtistFromDB(id);
   }
 
   // async update(

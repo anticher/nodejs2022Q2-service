@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Artist } from 'src/artists/interfaces/artist.model';
+import { Artist } from 'src/artists/models/artist.model';
 import { Album } from 'src/albums/interfaces/album.model';
 import { Track, TrackResponse } from 'src/tracks/interfaces/track.model';
 import { User } from 'src/users/models/user.model';
