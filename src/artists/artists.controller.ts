@@ -13,7 +13,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ArtistsService } from './artists.service';
 import { CreateArtistDto } from './dto/create.dto';
 import { UpdateArtistDto } from './dto/update.dto';
-import { ArtistResponse } from './interfaces/artist.model';
+import { Artist } from './interfaces/artist.model';
 
 @ApiTags('Artist')
 @Controller('artist')
@@ -26,13 +26,13 @@ export class ArtistsController {
   @ApiResponse({
     status: 201,
     description: 'The artist has been successfully created.',
-    type: ArtistResponse,
+    type: Artist,
   })
   @ApiResponse({ status: 400, description: 'ArtistId is invalid' })
   @Post()
   create(
     @Body(new ValidationPipe({ whitelist: true })) artist: CreateArtistDto,
-  ): ArtistResponse {
+  ): Promise<Artist> {
     return this.artistsService.create(artist);
   }
 
@@ -43,7 +43,7 @@ export class ArtistsController {
   @ApiResponse({
     status: 200,
     description: 'The artist has been successfully updated.',
-    type: ArtistResponse,
+    type: Artist,
   })
   @ApiResponse({ status: 400, description: 'ArtistId is invalid' })
   @ApiResponse({ status: 404, description: 'Artist is not exist' })
@@ -51,7 +51,7 @@ export class ArtistsController {
   update(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body(new ValidationPipe({ whitelist: true })) artist: UpdateArtistDto,
-  ): ArtistResponse {
+  ): Promise<Artist> {
     return this.artistsService.update(id, artist);
   }
 
@@ -66,7 +66,9 @@ export class ArtistsController {
   @ApiResponse({ status: 400, description: 'ArtistId is invalid' })
   @ApiResponse({ status: 404, description: 'Artist is not exist' })
   @Delete(':id')
-  delete(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string): void {
+  delete(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): Promise<void> {
     return this.artistsService.delete(id);
   }
 
@@ -77,14 +79,14 @@ export class ArtistsController {
   @ApiResponse({
     status: 200,
     description: 'Gets artist information',
-    type: ArtistResponse,
+    type: Artist,
   })
   @ApiResponse({ status: 400, description: 'ArtistId is invalid' })
   @ApiResponse({ status: 404, description: 'Artist is not exist' })
   @Get(':id')
   getById(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-  ): ArtistResponse {
+  ): Promise<Artist> {
     return this.artistsService.getArtist(id);
   }
 
@@ -95,10 +97,10 @@ export class ArtistsController {
   @ApiResponse({
     status: 200,
     description: 'Gets artists information',
-    type: [ArtistResponse],
+    type: [Artist],
   })
   @Get()
-  getAll(): ArtistResponse[] {
+  getAll(): Promise<Artist[]> {
     return this.artistsService.getAll();
   }
 }
