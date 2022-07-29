@@ -1,6 +1,6 @@
 ## git clone
 
-## git switch containerization-docker
+## git switch postgresql-orm
 
 ## .env.example => .env
 
