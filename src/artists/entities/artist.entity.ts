@@ -1,25 +1,21 @@
-import AlbumEntity from 'src/albums/entities/album.entity';
-import {
-  Column,
-  Entity,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { AlbumEntity } from 'src/albums/entities/album.entity';
+import { TrackEntity } from 'src/tracks/entities/track.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('artist')
-class ArtistEntity {
+export class ArtistEntity {
   @PrimaryGeneratedColumn('uuid')
   public id: string;
 
-  @Column('text')
+  @Column()
   public name: string;
 
-  @Column('boolean')
+  @Column()
   public grammy: boolean;
 
-  @OneToMany(() => AlbumEntity, (album: AlbumEntity) => album.artistId)
-  public album: AlbumEntity;
-}
+  @OneToMany(() => AlbumEntity, (album) => album.artistId)
+  albums: AlbumEntity[];
 
-export default ArtistEntity;
+  @OneToMany(() => TrackEntity, (track) => track.artistId)
+  tracks: TrackEntity[];
+}

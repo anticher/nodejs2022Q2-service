@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Artist } from 'src/artists/models/artist.model';
 import { Album } from 'src/albums/models/album.model';
+import { Artist } from 'src/artists/models/artist.model';
+import { Favourites } from 'src/favourites/interfaces/favourite';
 import { Track } from 'src/tracks/models/track.model';
 import { User } from 'src/users/models/user.model';
-import { Favourites } from 'src/favourites/interfaces/favourite';
 
 @Injectable()
 export class IMDBService {

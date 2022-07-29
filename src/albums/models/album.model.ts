@@ -9,7 +9,4 @@ export class Album {
 
   @ApiProperty()
   year: number;
-
-  @ApiProperty()
-  artistId: string | null;
 }

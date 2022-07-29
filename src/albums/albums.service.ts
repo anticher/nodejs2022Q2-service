@@ -1,10 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create.dto';
 import { UpdateAlbumDto } from './dto/update.dto';
-import { Album } from './models/album.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import AlbumEntity from './entities/album.entity';
+import { AlbumEntity } from './entities/album.entity';
+import { Album } from './models/album.model';
 
 @Injectable()
 export class AlbumsService {
@@ -38,19 +38,11 @@ export class AlbumsService {
     if (!album) {
       throw new HttpException('album does not exist', HttpStatus.NOT_FOUND);
     }
-    //   this.db.favourites.albumIds = this.db.favourites.albumIds.filter(
-    //     (element) => element !== id,
-    //   );
-    //   this.db.tracks.forEach((track) => {
-    //     if (track.albumId === id) {
-    //       track.albumId = null;
-    //     }
-    //   });
     await this.albumsRepository.delete(album.id);
     throw new HttpException('', HttpStatus.NO_CONTENT);
   }
 
-  async getAlbumFromDB(id: string): Promise<AlbumEntity> {
+  async getAlbumFromDB(id: string): Promise<Album> {
     const album = await this.albumsRepository.findOneBy({
       id: id,
     });

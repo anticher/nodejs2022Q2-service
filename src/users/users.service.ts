@@ -3,7 +3,7 @@ import { CreateUserDto } from './dto/create.dto';
 import { User } from './models/user.model';
 import { UpdatePasswordDto } from './dto/update.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import UserEntity from './entities/user.entity';
+import { UserEntity } from './entities/user.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -60,7 +60,7 @@ export class UsersService {
 
   async getUserFromDB(id: string): Promise<UserEntity> {
     const user = await this.usersRepository.findOneBy({
-      id: id,
+      id,
     });
     return user;
   }

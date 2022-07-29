@@ -19,6 +19,7 @@ import { Album } from './models/album.model';
 @Controller('album')
 export class AlbumsController {
   constructor(private readonly albumsService: AlbumsService) {}
+
   @ApiOperation({
     summary: 'Add new album',
     description: 'Add new album information',

@@ -1,27 +1,32 @@
-import ArtistEntity from 'src/artists/entities/artist.entity';
+import { ArtistEntity } from 'src/artists/entities/artist.entity';
+import { TrackEntity } from 'src/tracks/entities/track.entity';
 import {
   Column,
   Entity,
-  JoinColumn,
   ManyToOne,
-  OneToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity('album')
-class AlbumEntity {
+export class AlbumEntity {
   @PrimaryGeneratedColumn('uuid')
   public id: string;
 
-  @Column('text')
+  @Column()
   public name: string;
 
-  @Column('int')
+  @Column()
   public year: number;
 
-  @ManyToOne(() => ArtistEntity)
-  @Column({ type: 'uuid', nullable: true })
-  public artistId: string | null;
-}
+  @ManyToOne(() => ArtistEntity, (artist) => artist.id, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
+  public artist: ArtistEntity;
+  @Column({ nullable: true })
+  public artistId: string;
 
-export default AlbumEntity;
+  @OneToMany(() => TrackEntity, (track) => track.albumId)
+  tracks: TrackEntity[];
+}

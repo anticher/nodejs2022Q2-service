@@ -7,6 +7,11 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  FavouriteAlbumsEntity,
+  FavouriteArtistsEntity,
+  FavouriteTracksEntity,
+} from './entities/favourite.entity';
 import { FavouritesService } from './favourites.service';
 import { FavouritesResponse } from './interfaces/favourite';
 
@@ -27,7 +32,7 @@ export class FavouritesController {
   @Post('artist/:id')
   addArtist(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-  ): void {
+  ): Promise<FavouriteArtistsEntity> {
     return this.favouritesService.addArtist(id);
   }
 
@@ -44,7 +49,7 @@ export class FavouritesController {
   @Delete('artist/:id')
   deleteArtist(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-  ): void {
+  ): Promise<void> {
     return this.favouritesService.deleteArtist(id);
   }
 
@@ -59,7 +64,9 @@ export class FavouritesController {
   @ApiResponse({ status: 400, description: 'AlbumId is invalid' })
   @ApiResponse({ status: 422, description: 'Album is not exist' })
   @Post('album/:id')
-  addAlbum(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string): void {
+  addAlbum(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): Promise<FavouriteAlbumsEntity> {
     return this.favouritesService.addAlbum(id);
   }
 
@@ -76,7 +83,7 @@ export class FavouritesController {
   @Delete('album/:id')
   deleteAlbum(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-  ): void {
+  ): Promise<void> {
     return this.favouritesService.deleteAlbum(id);
   }
 
@@ -91,7 +98,9 @@ export class FavouritesController {
   @ApiResponse({ status: 400, description: 'TrackId is invalid' })
   @ApiResponse({ status: 422, description: 'Track is not exist' })
   @Post('track/:id')
-  addTrack(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string): void {
+  addTrack(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): Promise<FavouriteTracksEntity> {
     return this.favouritesService.addTrack(id);
   }
 
@@ -108,7 +117,7 @@ export class FavouritesController {
   @Delete('track/:id')
   deleteTrack(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-  ): void {
+  ): Promise<void> {
     return this.favouritesService.deleteTrack(id);
   }
 
@@ -122,7 +131,7 @@ export class FavouritesController {
     type: FavouritesResponse,
   })
   @Get()
-  getAll(): FavouritesResponse {
+  getAll() {
     return this.favouritesService.getAll();
   }
 }

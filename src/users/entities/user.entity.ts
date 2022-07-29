@@ -16,7 +16,7 @@ const createUpdateDateTransform = () => {
 };
 
 @Entity('user')
-class UserEntity {
+export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
   public id: string;
 
@@ -35,5 +35,3 @@ class UserEntity {
   @UpdateDateColumn(createUpdateDateTransform())
   public updatedAt: number;
 }
-
-export default UserEntity;

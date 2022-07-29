@@ -3,7 +3,7 @@ import { CreateTrackDto } from './dto/create.dto';
 import { Track } from './models/track.model';
 import { UpdateTrackDto } from './dto/update.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import TrackEntity from './entities/track.entity';
+import { TrackEntity } from './entities/track.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -38,14 +38,11 @@ export class TracksService {
     if (!track) {
       throw new HttpException('track does not exist', HttpStatus.NOT_FOUND);
     }
-    //   this.db.favourites.trackIds = this.db.favourites.trackIds.filter(
-    //     (element) => element !== id,
-    //   );
     await this.tracksRepository.delete(track.id);
     throw new HttpException('', HttpStatus.NO_CONTENT);
   }
 
-  async getTrackFromDB(id: string): Promise<TrackEntity> {
+  async getTrackFromDB(id: string): Promise<Track> {
     const track = await this.tracksRepository.findOneBy({
       id: id,
     });

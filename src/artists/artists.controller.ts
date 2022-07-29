@@ -19,6 +19,7 @@ import { Artist } from './models/artist.model';
 @Controller('artist')
 export class ArtistsController {
   constructor(private readonly artistsService: ArtistsService) {}
+
   @ApiOperation({
     summary: 'Add new artist',
     description: 'Add new artist information',
