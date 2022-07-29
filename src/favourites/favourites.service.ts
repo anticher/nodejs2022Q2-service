@@ -1,9 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { IMDBService } from 'src/db/in-memory-db.service';
-import { Favourites, FavouritesResponse } from './interfaces/favourite';
-import { v4 as uuidv4, validate as isValidUUID } from 'uuid';
-import { isNotEmpty } from 'class-validator';
-import { Not, Repository } from 'typeorm';
+import { Favourites } from './interfaces/favourite';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   FavouriteAlbumsEntity,
