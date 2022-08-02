@@ -17,6 +17,9 @@ import {
   FavouriteArtistsEntity,
   FavouriteTracksEntity,
 } from './favourites/entities/favourite.entity';
+import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -49,9 +52,15 @@ import {
     TracksModule,
     FavouritesModule,
     DatabaseModule,
+    AuthModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class AppModule {
   constructor(private dataSource: DataSource) {}

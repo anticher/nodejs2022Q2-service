@@ -65,6 +65,14 @@ export class UsersService {
     return user;
   }
 
+  async getUserByLogin(login: string): Promise<User> {
+    const user = await this.usersRepository.findOneBy({
+      login,
+    });
+    console.log(user);
+    return user;
+  }
+
   async getUser(id: string): Promise<User> {
     const user = await this.getUserFromDB(id);
     if (!user) {
