@@ -49,6 +49,16 @@ export class UsersService {
     return rest;
   }
 
+  async updateRefresh(id: string, refresh_token: string): Promise<User> {
+    const user = await this.getUserFromDB(id);
+    await this.usersRepository.update(user.id, {
+      hashedRefreshToken: refresh_token,
+    });
+    const updatedUser = await this.getUser(id);
+    const { password, ...rest } = updatedUser;
+    return rest;
+  }
+
   async delete(id: string): Promise<void> {
     const user = await this.getUserFromDB(id);
     if (!user) {
@@ -78,14 +88,14 @@ export class UsersService {
     if (!user) {
       throw new HttpException('user does not exist', HttpStatus.NOT_FOUND);
     }
-    const { password, ...rest } = user;
+    const { password, hashedRefreshToken, ...rest } = user;
     return rest;
   }
 
   async getAll(): Promise<User[]> {
     const users = await this.usersRepository.find();
     const response = users.map((user) => {
-      const { password, ...rest } = user;
+      const { password, hashedRefreshToken, ...rest } = user;
       return rest;
     });
     return response;

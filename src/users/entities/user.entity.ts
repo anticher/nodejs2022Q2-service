@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
@@ -34,4 +35,8 @@ export class UserEntity {
 
   @UpdateDateColumn(createUpdateDateTransform())
   public updatedAt: number;
+
+  @Column({ nullable: true })
+  @Exclude()
+  public hashedRefreshToken?: string;
 }
