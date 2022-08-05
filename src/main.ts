@@ -1,8 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import getLogLevels from './logger/getLogLevels';
-import { HttpExceptionFilter } from './filters/http-exception.filter';
+import getLogLevels from './shared/logger/getLogLevels';
+import { HttpExceptionFilter } from './shared/filters/http-exception.filter';
 
 async function bootstrap() {
   process

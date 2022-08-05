@@ -5,7 +5,7 @@ import { AlbumsModule } from './albums/albums.module';
 import { TracksModule } from './tracks/tracks.module';
 import { FavouritesModule } from './favourites/favourites.module';
 import { ConfigModule } from '@nestjs/config';
-import { DatabaseModule } from './database/database.module';
+import { DatabaseModule } from './shared/database/database.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './users/entities/user.entity';
 import { DataSource } from 'typeorm';
@@ -20,8 +20,8 @@ import {
 import { AuthModule } from './auth/auth.module';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
-import { LoggerMiddleware } from './logger/logger.middleware';
-import { HttpExceptionFilter } from './filters/http-exception.filter';
+import { LoggerMiddleware } from './shared/logger/logger.middleware';
+import { HttpExceptionFilter } from './shared/filters/http-exception.filter';
 
 @Module({
   imports: [

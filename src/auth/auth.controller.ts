@@ -6,7 +6,7 @@ import {
   HttpCode,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { Public } from 'src/decorators/public.decorator';
+import { Public } from 'src/shared/decorators/public.decorator';
 import { CreateUserDto } from 'src/users/dto/create.dto';
 import { User } from 'src/users/models/user.model';
 import { AuthService } from './auth.service';
