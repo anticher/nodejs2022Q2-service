@@ -12,7 +12,6 @@ import {
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create.dto';
 import { UpdatePasswordDto } from './dto/update.dto';
-import { UserEntity } from './entities/user.entity';
 import { User } from './models/user.model';
 import { UsersService } from './users.service';
 

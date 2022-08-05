@@ -8,8 +8,6 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
-  private list: User[] = [];
-
   constructor(
     @InjectRepository(UserEntity)
     private usersRepository: Repository<UserEntity>,
