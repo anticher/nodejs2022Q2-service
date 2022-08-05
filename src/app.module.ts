@@ -21,7 +21,7 @@ import { AuthModule } from './auth/auth.module';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { LoggerMiddleware } from './logger/logger.middleware';
-import { HttpExceptionFilter } from './logger/http-exception.filter';
+import { HttpExceptionFilter } from './filters/http-exception.filter';
 
 @Module({
   imports: [
